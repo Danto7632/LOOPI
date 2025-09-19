@@ -8,7 +8,8 @@ const FooterContainer = styled.footer`
   margin-top: auto;
   
   @media (max-width: 768px) {
-    display: none; /* 모바일에서 숨김 */
+    padding: 32px 16px 80px; /* 모바일 네비게이션 바 공간 확보 */
+    display: block; /* 모바일에서도 표시 */
   }
 `;
 
