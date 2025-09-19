@@ -8,10 +8,14 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
     - name: Checkout code
@@ -38,14 +42,19 @@ jobs:
         npm run build
         echo "✅ Frontend build completed"
 
-    # 간단한 배포 (선택적)
-    - name: Deploy to GitHub Pages (Frontend)
-      if: success()
-      uses: peaceiris/actions-gh-pages@v4
+    # Pages 아티팩트 업로드
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./frontend/build
-        force_orphan: true
+        path: './frontend/build'
+
+    # GitHub Pages 배포
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
 
     # 배포 완료 알림
     - name: Deployment Summary

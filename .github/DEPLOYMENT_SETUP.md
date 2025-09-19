@@ -5,18 +5,51 @@
 최근 배포에서 발생한 오류들:
 1. **Railway CLI**: `--token` 인수 문법 오류 → 수정됨
 2. **Vercel CLI**: 토큰이 설정되지 않음 → 조건부 실행으로 수정됨
+3. **GitHub Pages**: 권한 오류 → 새로운 Actions 방식으로 수정됨
 
 ## 📋 배포 워크플로우 옵션
 
-### 1. 간단한 배포 (simple-deploy.yml) - 추천
-- ✅ 빌드만 수행하고 GitHub Pages에 프론트엔드 배포
+### 1. 간단한 배포 (simple-deploy.yml) - 추천 ⭐
+- ✅ GitHub Pages에 프론트엔드 자동 배포
+- ✅ **Secrets 설정 불필요**
+- ✅ 즉시 사용 가능
 - ❌ 백엔드는 수동 배포 필요
-- 🔧 추가 설정 불필요
 
 ### 2. 자동 배포 (deploy-production.yml)
 - ✅ Vercel + Railway 자동 배포
-- ❌ 토큰 설정 필수
+- ❌ **Secrets 설정 필수**
 - 🔧 복잡한 설정 필요
+
+## 🔧 GitHub Repository 설정 (필수)
+
+GitHub Pages 배포를 위해 **반드시** 다음 설정을 해야 합니다:
+
+### 1. Actions 권한 설정
+1. **GitHub 리포지토리** → **Settings** → **Actions** → **General**
+2. **Workflow permissions** 섹션에서:
+   - ☑️ "Read and write permissions" 선택
+   - ☑️ "Allow GitHub Actions to create and approve pull requests" 체크
+3. **Save** 클릭
+
+### 2. Pages 설정
+1. **Settings** → **Pages**
+2. **Source**: "GitHub Actions" 선택
+3. **Save** 클릭
+
+⚠️ **이 설정을 하지 않으면 403 권한 오류가 계속 발생합니다!**
+
+## ❓ Secrets 설정 필수 여부
+
+### 🆓 필수 아님 (GitHub Pages만 사용)
+**사용 워크플로우**: `simple-deploy.yml`
+**배포 대상**: 프론트엔드만
+**필요한 설정**: 없음
+**URL**: `https://danto7632.github.io/LOOPI/`
+
+### 🔐 필수임 (전체 자동 배포)
+**사용 워크플로우**: `deploy-production.yml`
+**배포 대상**: 프론트엔드 + 백엔드
+**필요한 설정**: 아래 Secrets 모두 설정
 
 ## 🛠️ 토큰 설정 방법 (자동 배포 사용시)
 
