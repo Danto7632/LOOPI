@@ -1,0 +1,72 @@
+name: Build and Deploy Guide
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'frontend/**' ]
+
+jobs:
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Build project
+      run: |
+        cd frontend
+        npm run build
+      env:
+        CI: false
+
+    - name: Build Success ✅
+      run: |
+        echo "🎉 프론트엔드 빌드가 완료되었습니다!"
+        echo ""
+        echo "📦 빌드 결과:"
+        ls -la frontend/build/
+        echo ""
+        echo "🚀 배포 옵션:"
+        echo ""
+        echo "1️⃣ Vercel 수동 배포 (추천):"
+        echo "   → https://vercel.com"
+        echo "   → Add New Project"
+        echo "   → Select LOOPI repository"
+        echo "   → Root Directory: frontend"
+        echo "   → Deploy"
+        echo ""
+        echo "2️⃣ Netlify 수동 배포:"
+        echo "   → https://netlify.com"
+        echo "   → New site from Git"
+        echo "   → Select LOOPI repository"
+        echo "   → Build settings: npm run build"
+        echo "   → Publish directory: frontend/build"
+        echo ""
+        echo "3️⃣ 자동 배포 설정:"
+        echo "   → Vercel/Netlify 토큰을 GitHub Secrets에 추가"
+        echo "   → deploy-vercel.yml 워크플로우 자동 실행"
+        echo ""
+        echo "📖 자세한 가이드:"
+        echo "   → .github/VERCEL_DEPLOYMENT_GUIDE.md"
+        echo "   → .github/FREE_BACKEND_DEPLOYMENT.md"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build
+        path: frontend/build/
+        retention-days: 7
