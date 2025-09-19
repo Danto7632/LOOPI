@@ -104,12 +104,21 @@ jobs:
 
     # Vercel 백엔드 배포 (대안)
     - name: Deploy Backend to Vercel (Alternative)
-      if: ${{ secrets.VERCEL_TOKEN != '' }}
       run: |
         cd backend
-        npm run build
-        npx vercel --prod --confirm --token "${{ secrets.VERCEL_TOKEN }}"
-        echo "✅ Vercel 백엔드 배포 완료!"
+        if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+          npm run build
+          npx vercel --prod --confirm --token "${{ secrets.VERCEL_TOKEN }}"
+          echo "✅ Vercel 백엔드 배포 완료!"
+        else
+          echo "⚠️ VERCEL_TOKEN not set."
+          echo "🔧 Vercel 백엔드 수동 배포 가이드:"
+          echo "1. https://vercel.com 방문"
+          echo "2. GitHub 계정으로 로그인"
+          echo "3. 'Add New Project' 클릭"
+          echo "4. LOOPI 리포지토리의 backend 폴더 선택"
+          echo "5. Deploy 클릭"
+        fi
       env:
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
