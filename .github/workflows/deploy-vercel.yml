@@ -1,0 +1,48 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'frontend/**' ]  # 프론트엔드 변경시에만 실행
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend to Vercel
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Build project
+      run: |
+        cd frontend
+        npm run build
+      env:
+        CI: false  # 경고를 에러로 처리하지 않음
+
+    # Vercel CLI를 사용한 배포
+    - name: Deploy to Vercel
+      run: |
+        cd frontend
+        npx vercel --prod --confirm --token ${{ secrets.VERCEL_TOKEN }}
+      env:
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    - name: Deployment Success
+      run: |
+        echo "🎉 Vercel 배포가 완료되었습니다!"
+        echo "사이트 URL을 확인하세요."

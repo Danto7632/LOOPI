@@ -72,7 +72,7 @@ jobs:
         cd backend
         npm run build
 
-    # Railway 배포
+    # Railway 배포 (추천)
     - name: Deploy to Railway
       run: |
         npm install -g @railway/cli
@@ -80,12 +80,26 @@ jobs:
         if [ -n "${{ secrets.RAILWAY_TOKEN }}" ]; then
           railway login --token $RAILWAY_TOKEN
           railway deploy
+          echo "✅ Railway 배포 완료!"
         else
-          echo "RAILWAY_TOKEN not set. Skipping Railway deployment."
-          echo "Please set RAILWAY_TOKEN in GitHub repository secrets."
+          echo "⚠️ RAILWAY_TOKEN not set."
+          echo "Railway 수동 배포 가이드: https://railway.app"
         fi
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+    # 또는 Vercel 배포 (대안)
+    - name: Deploy Backend to Vercel (Alternative)
+      if: secrets.VERCEL_TOKEN && !secrets.RAILWAY_TOKEN
+      run: |
+        cd backend
+        npm run build
+        npx vercel --prod --confirm
+        echo "✅ Vercel 배포 완료!"
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   # 배포 완료 알림
   notify-deployment:

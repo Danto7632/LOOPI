@@ -1,6 +1,44 @@
-# 🌐 배포 URL 및 상태 확인 가이드
+# 🌐 배포 URL 및 상태 확인 가## 🔗 배포 URL 확인 방법
 
-## 📊 현재 배포 상태
+### 🆕 Option 1: Vercel (추천) ⭐
+
+#### URL 패턴:
+```
+https://loopi.vercel.app/
+https://loopi.vercel.app/products
+https://loopi.vercel.app/login
+```
+
+#### 장점:
+- ✅ 깔끔한 URL (서브폴더 없음)
+- ✅ React SPA 완벽 지원
+- ✅ 빠른 배포 (몇 초)
+- ✅ 무료 플랜
+- ✅ 자동 HTTPS
+
+#### 배포 방법:
+1. [Vercel.com](https://vercel.com) 가입
+2. GitHub 리포지토리 연결
+3. Root Directory: `frontend` 선택
+4. Deploy 클릭 → 완료!
+
+**자세한 가이드**: [Vercel 배포 가이드](.github/VERCEL_DEPLOYMENT_GUIDE.md)
+
+### 2. GitHub Pages (기존)
+
+#### URL 패턴:
+```
+https://danto7632.github.io/LOOPI/#/
+```
+
+#### 확인 방법:
+1. **GitHub 리포지토리** → **Settings** → **Pages**
+2. "Your site is published at" 메시지에서 URL 확인
+3. 또는 **Actions** 탭에서 성공한 workflow 로그 확인
+
+#### 설정 확인:
+- Source: **Deploy from a branch**
+- Branch: **gh-pages** / **(root)**태
 
 ### ✅ 성공한 배포
 - **CI/CD Pipeline**: ✅ 성공 (빌드 및 테스트)
@@ -37,7 +75,7 @@ https://danto7632.github.io/LOOPI/
 - Source: **Deploy from a branch**
 - Branch: **gh-pages** / **(root)**
 
-### 2. 백엔드 (현재 배포된 곳 없음)
+### 2. 백엔드 (무료 옵션 available)
 
 현재 백엔드는 실제 배포되지 않았습니다. 다음 옵션 중 선택:
 
@@ -98,12 +136,32 @@ https://loopi-backend.vercel.app/
 - [ ] API 엔드포인트 테스트
 - [ ] CORS 설정 확인
 
+## 🚀 추천 배포 방법
+
+### 🥇 최고 조합 (무료)
+```
+프론트엔드: Vercel (https://loopi.vercel.app)
+백엔드: Railway (https://loopi-backend.railway.app)
+데이터베이스: Railway MySQL
+```
+
+### 🥈 간단한 시작
+```
+프론트엔드: Vercel (5분 배포)
+백엔드: 나중에 추가
+```
+
+### 🥉 기존 방법
+```
+프론트엔드: GitHub Pages (복잡한 설정)
+백엔드: 수동 배포 필요
+```
+
 ## 🚀 다음 단계
 
-1. **GitHub Pages 수정 적용**: 다음 푸시 때 정상 배포 예상
-2. **백엔드 배포 선택**: Railway, Heroku, 또는 기타 플랫폼
-3. **도메인 연결**: 커스텀 도메인 설정 (선택사항)
-4. **HTTPS 설정**: 자동 적용됨 (GitHub Pages)
+1. **지금 즉시**: [Vercel 배포 가이드](.github/VERCEL_DEPLOYMENT_GUIDE.md) 따라하기
+2. **5분 후**: 깔끔한 URL로 사이트 확인
+3. **나중에**: [백엔드 무료 배포](.github/FREE_BACKEND_DEPLOYMENT.md) 추가
 
 ## 📞 긴급 문제 발생시
 
