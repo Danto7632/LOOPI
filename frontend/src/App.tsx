@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/layout/LOOPIHeader';
 import Footer from './components/layout/Footer';
+import MobileBottomNavigation from './components/layout/MobileBottomNavigation';
 import HomePage from './pages/LOOPIHomePage';
 import ProductListPage from './pages/ITAssetListPage';
 import ProductDetailPage from './pages/ProductDetailPage';
@@ -28,6 +29,10 @@ const AppContainer = styled.div`
 
 const Main = styled.main`
   flex: 1;
+  
+  @media (max-width: 768px) {
+    padding-bottom: 80px; /* 모바일 하단 네비게이션을 위한 여백 */
+  }
 `;
 
 // 페이지 이동 시 스크롤 초기화 컴포넌트
@@ -45,8 +50,36 @@ function App() {
   return (
     <AuthProvider>
       <AppContainer>
-        <Header />
-        <Main>
+        <AppRouter />
+        <Footer />
+      </AppContainer>
+    </AuthProvider>
+  );
+}
+
+// Router와 헤더 표시 로직을 분리
+const AppRouter: React.FC = () => {
+  const location = useLocation();
+  
+  // 모바일에서만 상품 상세 페이지에서 헤더 숨김
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const shouldHideHeader = isMobile && 
+                          location.pathname.includes('/products/') && 
+                          location.pathname !== '/products';
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    <>
+      {!shouldHideHeader && <Header />}
+      <Main>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -66,10 +99,9 @@ function App() {
           <Route path="/admin/*" element={<AdminPage />} />
         </Routes>
       </Main>
-      <Footer />
-    </AppContainer>
-    </AuthProvider>
+      <MobileBottomNavigation />
+    </>
   );
-}
+};
 
 export default App;

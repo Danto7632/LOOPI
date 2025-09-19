@@ -9,8 +9,8 @@ const ProductListPage: React.FC = () => {
         </h1>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '24px'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+          gap: '20px'
         }}>
           {/* 임시 상품 카드들 */}
           {[1, 2, 3, 4, 5, 6].map((item) => (

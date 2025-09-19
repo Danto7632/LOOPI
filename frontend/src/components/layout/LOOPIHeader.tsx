@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import SearchComponent from '../SearchComponent';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -424,40 +425,6 @@ const NavLink = styled.a`
   }
 `;
 
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 1;
-  max-width: 400px;
-  margin: 0 var(--spacing-3xl);
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  background-color: var(--bg-secondary);
-  transition: all var(--transition-fast);
-
-  &:focus {
-    outline: none;
-    border-color: var(--business-primary);
-    background-color: var(--white);
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-  }
-
-  &::placeholder {
-    color: var(--gray-500);
-    font-weight: var(--font-normal);
-  }
-`;
-
 const UserActions = styled.div`
   display: flex;
   align-items: center;
@@ -465,6 +432,16 @@ const UserActions = styled.div`
 
   @media (max-width: 768px) {
     gap: var(--spacing-md);
+  }
+`;
+
+const SearchComponentWrapper = styled.div`
+  flex: 1;
+  max-width: 400px;
+  margin: 0 var(--spacing-3xl);
+
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -530,21 +507,17 @@ const PrimaryButton = styled.button`
 `;
 
 const MobileMenuButton = styled.button`
-  display: none;
+  display: none; /* 모바일 하단 네비게이션으로 대체 */
   background: none;
   border: none;
   font-size: var(--font-size-lg);
   color: var(--gray-700);
   cursor: pointer;
   padding: var(--spacing-sm);
-
-  @media (max-width: 768px) {
-    display: block;
-  }
 `;
 
 const MobileMenu = styled.div<MobileMenuProps>`
-  display: none;
+  display: none; /* 모바일 하단 네비게이션으로 대체 */
   position: absolute;
   top: 100%;
   left: 0;
@@ -656,12 +629,15 @@ const Header: React.FC = () => {
           <NavLink as={Link} to="/faq">고객지원</NavLink>
         </Navigation>
 
-        <SearchContainer>
-          <SearchInput 
-            type="text" 
+        <SearchComponentWrapper>
+          <SearchComponent 
             placeholder="브랜드, 모델명, 제품명 검색 (예: ThinkPad T480, i5-8세대)"
+            onSearch={(query) => {
+              // 검색 결과 페이지로 이동하는 로직 추가 가능
+              console.log('검색:', query);
+            }}
           />
-        </SearchContainer>
+        </SearchComponentWrapper>
 
         <UserActions>
           {isAuthenticated ? (
