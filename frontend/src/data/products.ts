@@ -30,6 +30,7 @@ export interface Product {
     rating: number;
     count: number;
   };
+  likes: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -128,6 +129,7 @@ export const MOCK_PRODUCTS: Product[] = [
       rating: 4.8,
       count: 142
     },
+    likes: 326,
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z'
   },
@@ -164,6 +166,7 @@ export const MOCK_PRODUCTS: Product[] = [
       rating: 4.6,
       count: 89
     },
+    likes: 157,
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z'
   },
@@ -218,6 +221,7 @@ export const MOCK_PRODUCTS: Product[] = [
       rating: 4.7,
       count: 76
     },
+    likes: 243,
     createdAt: '2024-01-12T11:30:00Z',
     updatedAt: '2024-01-19T13:20:00Z'
   },
@@ -254,6 +258,7 @@ export const MOCK_PRODUCTS: Product[] = [
       rating: 4.5,
       count: 45
     },
+    likes: 89,
     createdAt: '2024-01-08T14:00:00Z',
     updatedAt: '2024-01-17T10:15:00Z'
   },
@@ -304,6 +309,7 @@ export const MOCK_PRODUCTS: Product[] = [
       rating: 4.9,
       count: 203
     },
+    likes: 512,
     createdAt: '2024-01-05T09:30:00Z',
     updatedAt: '2024-01-21T11:45:00Z'
   }

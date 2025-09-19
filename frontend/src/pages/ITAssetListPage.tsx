@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { MOCK_PRODUCTS, formatPrice } from '../data/products';
+import { MOCK_PRODUCTS } from '../data/products';
+import ProductCard from '../components/ProductCard';
 
 const ProductListContainer = styled.div`
   min-height: 100vh;
@@ -18,16 +19,35 @@ const Container = styled.div`
   }
 `;
 
-// KREAM 스타일 메인 배너
-const MainBanner = styled.div`
-  background: linear-gradient(135deg, #222 0%, #444 100%);
-  border-radius: 16px;
-  padding: 60px 40px;
+// 슬라이더 배너 컨테이너
+const BannerSliderContainer = styled.div`
+  position: relative;
   margin: 24px 0;
+  border-radius: 16px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    margin: 16px 0;
+  }
+`;
+
+const BannerSlider = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+`;
+
+const BannerSlide = styled.div<{ backgroundImage?: string; backgroundColor?: string }>`
+  min-width: 100%;
+  height: 280px;
+  padding: 60px 40px;
   color: white;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: ${props => props.backgroundColor || 'linear-gradient(135deg, #222 0%, #444 100%)'};
 
   &::before {
     content: '';
@@ -36,23 +56,24 @@ const MainBanner = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('/images/메인.jpeg') center/cover;
-    opacity: 0.1;
+    background: ${props => props.backgroundImage ? `url(${props.backgroundImage}) center/cover` : 'none'};
+    opacity: 0.3;
     z-index: 0;
   }
 
   @media (max-width: 768px) {
+    height: 220px;
     padding: 40px 24px;
-    margin: 16px 0;
   }
 `;
 
-const BannerContent = styled.div`
+const SlideContent = styled.div`
   position: relative;
   z-index: 1;
+  max-width: 600px;
 `;
 
-const BannerTitle = styled.h1`
+const SlideTitle = styled.h1`
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -62,10 +83,11 @@ const BannerTitle = styled.h1`
   }
 `;
 
-const BannerSubtitle = styled.p`
+const SlideSubtitle = styled.p`
   font-size: 18px;
   opacity: 0.9;
   margin-bottom: 32px;
+  line-height: 1.5;
   
   @media (max-width: 768px) {
     font-size: 16px;
@@ -73,7 +95,7 @@ const BannerSubtitle = styled.p`
   }
 `;
 
-const BannerButton = styled(Link)`
+const SlideButton = styled(Link)`
   display: inline-block;
   background: white;
   color: #222;
@@ -87,6 +109,43 @@ const BannerButton = styled(Link)`
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   }
+
+  @media (max-width: 768px) {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+`;
+
+// 슬라이더 네비게이션 (좌하단 1/4 형태)
+const SliderNavigation = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+
+  @media (max-width: 768px) {
+    bottom: 12px;
+    left: 12px;
+    padding: 6px 12px;
+  }
+`;
+
+const SlideCounter = styled.span`
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 // 검색 및 필터 헤더
@@ -98,13 +157,62 @@ const SearchHeader = styled.div`
   border: 1px solid #ebebeb;
 `;
 
+const CategoryTabs = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+`;
+
+const CategoryTab = styled.button<{ active: boolean }>`
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid ${props => props.active ? '#222' : '#ddd'};
+  background: ${props => props.active ? '#222' : 'white'};
+  color: ${props => props.active ? 'white' : '#666'};
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #222;
+    background: ${props => props.active ? '#222' : '#f8f8f8'};
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+`;
+
+const SearchControls = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+`;
+
 const SearchInput = styled.input`
-  width: 100%;
-  padding: 16px 20px;
-  border: 1px solid #ebebeb;
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 16px;
-  background: #fafafa;
+  font-size: 14px;
+  background: #f8f8f8;
 
   &:focus {
     outline: none;
@@ -112,262 +220,65 @@ const SearchInput = styled.input`
     background: white;
   }
 
-  &::placeholder {
-    color: #8e8e93;
+  @media (max-width: 768px) {
+    font-size: 16px; /* iOS 줌 방지 */
   }
 `;
 
-// 카테고리 및 필터 - KREAM 스타일
-const FilterSection = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-  overflow-x: auto;
-  padding-bottom: 4px;
+const SortSelect = styled.select`
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  min-width: 120px;
 
-  &::-webkit-scrollbar {
-    display: none;
+  &:focus {
+    outline: none;
+    border-color: #222;
   }
 
   @media (max-width: 768px) {
-    gap: 6px;
+    width: 100%;
   }
 `;
 
-const FilterChip = styled.button<{ active: boolean }>`
-  padding: 8px 16px;
-  border: 1px solid ${props => props.active ? '#222' : '#ebebeb'};
-  background: ${props => props.active ? '#222' : 'white'};
-  color: ${props => props.active ? 'white' : '#333'};
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-
-  &:hover {
-    border-color: #222;
-  }
-`;
-
-// 정렬 및 뷰 옵션
+// 컨트롤 바
 const ControlBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   padding: 0 4px;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
+    margin-bottom: 16px;
   }
-`;
-
-const SortOptions = styled.div`
-  display: flex;
-  gap: 16px;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
-`;
-
-const SortButton = styled.button<{ active: boolean }>`
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  color: ${props => props.active ? '#222' : '#8e8e93'};
-  font-size: 14px;
-  font-weight: ${props => props.active ? '600' : '400'};
-  cursor: pointer;
-  position: relative;
-
-  ${props => props.active && `
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: #222;
-    }
-  `}
 `;
 
 const ProductCount = styled.div`
-  color: #8e8e93;
   font-size: 14px;
-
-  @media (max-width: 768px) {
-    text-align: center;
-  }
+  color: #666;
+  font-weight: 500;
 `;
 
-// 상품 그리드 - KREAM 스타일
+// 상품 그리드
 const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-  
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 32px;
+  margin-bottom: 80px;
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  @media (max-width: 480px) {
     gap: 12px;
   }
-`;
-
-const ProductCard = styled(Link)`
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s ease;
-  border: 1px solid #ebebeb;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const ProductImageContainer = styled.div`
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-  background: #fafafa;
-  overflow: hidden;
-`;
-
-const ProductImage = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #8e8e93;
-  background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-`;
-
-const ProductBadge = styled.span<{ type: string }>`
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 3px 6px;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: 600;
-  color: white;
-  background: ${props => {
-    switch (props.type) {
-      case '즉시거래': return '#31b96e';
-      case '공동구매': return '#4a90e2';
-      case '호가등록': return '#ff6b35';
-      default: return '#8e8e93';
-    }
-  }};
-`;
-
-const ProductInfo = styled.div`
-  padding: 12px;
-`;
-
-const ProductBrand = styled.div`
-  font-size: 11px;
-  color: #888;
-  font-weight: 600;
-  margin-bottom: 2px;
-`;
-
-const ProductName = styled.h3`
-  font-size: 13px;
-  font-weight: 400;
-  color: #222;
-  margin-bottom: 8px;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
-`;
-
-const ProductSpecs = styled.div`
-  font-size: 10px;
-  color: #aaa;
-  margin-bottom: 8px;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-`;
-
-// KREAM 스타일 가격 표시
-const ProductPrices = styled.div`
-  margin-top: 8px;
-`;
-
-const PriceRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-`;
-
-const PriceLabel = styled.div`
-  font-size: 10px;
-  color: #8e8e93;
-`;
-
-const PriceValue = styled.div<{ type?: 'buy' | 'sell' }>`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${props => {
-    if (props.type === 'buy') return '#ef4444';
-    if (props.type === 'sell') return '#22c55e';
-    return '#222';
-  }};
-`;
-
-// 상품 메타 정보 (관심, 리뷰)
-const ProductMeta = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #f0f0f0;
-`;
-
-const MetaItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
-const HeartIcon = styled.span`
-  font-size: 12px;
-  color: #ff6b6b;
-`;
-
-const ReviewIcon = styled.span`
-  font-size: 10px;
-  color: #ffc107;
-`;
-
-const MetaText = styled.span`
-  font-size: 11px;
-  color: #8e8e93;
-  font-weight: 500;
 `;
 
 // 빈 상태
@@ -392,182 +303,184 @@ const ProductListPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('laptop');
   const [sortBy, setSortBy] = useState('latest');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 슬라이더 배너 데이터
+  const bannerSlides = [
+    {
+      id: 1,
+      title: "IT 자산 거래",
+      subtitle: "기업용 IT 자산을 안전하고 투명하게 거래하세요",
+      buttonText: "거래 시작하기",
+      buttonLink: "/register",
+      backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    },
+    {
+      id: 2,
+      title: "예약 거래 시스템",
+      subtitle: "원하는 시기에 맞춰 예약하고 안전하게 거래하세요",
+      buttonText: "예약하기",
+      buttonLink: "/reservation",
+      backgroundColor: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    },
+    {
+      id: 3,
+      title: "기업 인증 거래",
+      subtitle: "사업자 인증을 통한 신뢰할 수 있는 B2B 거래",
+      buttonText: "인증하기",
+      buttonLink: "/verification",
+      backgroundColor: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    },
+    {
+      id: 4,
+      title: "스페셜 이벤트",
+      subtitle: "지금 가입하면 첫 거래 수수료 무료!",
+      buttonText: "이벤트 참여",
+      buttonLink: "/event",
+      backgroundColor: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+    }
+  ];
 
   // 페이지 진입 시 스크롤 맨 위로
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const categories = [
-    { id: 'all', name: '전체' },
-    { id: 'laptop', name: '노트북' },
-    { id: 'desktop', name: '데스크톱' }, 
-    { id: 'monitor', name: '모니터' },
-    { id: 'mobile', name: '모바일' },
-    { id: 'tablet', name: '태블릿' }
-  ];
+  // 자동 슬라이드 효과
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % bannerSlides.length);
+    }, 5000); // 5초마다 슬라이드 변경
 
-  const sortOptions = [
-    { id: 'latest', name: '최신순' },
-    { id: 'price-low', name: '가격 낮은순' },
-    { id: 'price-high', name: '가격 높은순' },
-    { id: 'popular', name: '인기순' }
-  ];
+    return () => clearInterval(timer);
+  }, [bannerSlides.length]);
 
-  // 실제 제품 데이터를 목록 표시용으로 변환
-  const convertToListData = () => {
-    return MOCK_PRODUCTS.map(product => {
-      const baseVariant = product.variants[0];
-      
-      // 호가 시뮬레이션
-      const hasBuyOrders = Math.random() > 0.3;
-      const hasSellOrders = Math.random() > 0.3;
-      const isGroupBuy = Math.random() > 0.7;
-      
-      let badge = '';
-      if (hasBuyOrders && hasSellOrders) {
-        badge = '즉시거래';
-      } else if (hasBuyOrders || hasSellOrders) {
-        badge = '호가등록';
-      } else if (isGroupBuy) {
-        badge = '공동구매';
-      } else {
-        badge = '예약거래';
-      }
-
-      return {
-        id: product.id,
-        category: product.category,
-        brand: product.brand,
-        name: product.name,
-        specs: Object.entries(baseVariant.specs).slice(0, 3).map(([key, value]) => 
-          `${key}: ${Array.isArray(value) ? value[0] : value}`
-        ).join(', '),
-        instantBuy: baseVariant.price.instant,
-        instantSell: baseVariant.price.reserve,
-        badge: badge,
-        image: `${product.name} 이미지`,
-        hasBuyOrders,
-        hasSellOrders,
-        isGroupBuy
-      };
-    });
+  // 마우스 휠 이벤트 핸들러
+  const handleWheel = (e: React.WheelEvent) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      // 세로 스크롤이 더 클 때는 페이지 스크롤
+      return;
+    }
+    
+    e.preventDefault();
+    if (e.deltaX > 0) {
+      // 오른쪽으로 스크롤 - 다음 슬라이드
+      setCurrentSlide(prev => (prev + 1) % bannerSlides.length);
+    } else if (e.deltaX < 0) {
+      // 왼쪽으로 스크롤 - 이전 슬라이드
+      setCurrentSlide(prev => prev === 0 ? bannerSlides.length - 1 : prev - 1);
+    }
   };
 
-  const products = convertToListData();
+  const categories = [
+    { id: 'laptop', name: '노트북', icon: '💻' },
+    { id: 'desktop', name: '데스크탑', icon: '🖥️' },
+    { id: 'monitor', name: '모니터', icon: '📺' },
+    { id: 'mobile', name: '모바일', icon: '📱' },
+    { id: 'tablet', name: '태블릿', icon: '📱' },
+    { id: 'accessory', name: '액세서리', icon: '⌨️' }
+  ];
 
-  // 필터링 및 정렬
-  const filteredProducts = products
-    .filter(product => {
-      const categoryMatch = activeCategory === 'all' || product.category === activeCategory;
-      const searchMatch = searchQuery === '' || 
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchQuery.toLowerCase());
-      return categoryMatch && searchMatch;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return a.instantBuy - b.instantBuy;
-        case 'price-high':
-          return b.instantBuy - a.instantBuy;
-        case 'popular':
-          return Math.random() - 0.5; // 임시 랜덤 정렬
-        default:
-          return 0; // 최신순은 기본 순서 유지
-      }
-    });
+  // 필터링 로직
+  const filteredProducts = MOCK_PRODUCTS.filter(product => {
+    const matchesSearch = searchQuery === '' || 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.brand.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return matchesSearch;
+  });
+
+  // 정렬 로직
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return (a.variants[0]?.price.instant || 0) - (b.variants[0]?.price.instant || 0);
+      case 'price-high':
+        return (b.variants[0]?.price.instant || 0) - (a.variants[0]?.price.instant || 0);
+      case 'name':
+        return a.name.localeCompare(b.name);
+      default: // latest
+        return 0;
+    }
+  });
+
+  const handleHeartClick = (productId: string, isLiked: boolean) => {
+    console.log(`Product ${productId} ${isLiked ? 'liked' : 'unliked'}`);
+  };
 
   return (
     <ProductListContainer>
       <Container>
-        {/* KREAM 스타일 메인 배너 */}
-        <MainBanner>
-          <BannerContent>
-            <BannerTitle>LOOPI</BannerTitle>
-            <BannerSubtitle>IT 자산의 새로운 거래 경험</BannerSubtitle>
-            <BannerButton to="/products">지금 거래하기</BannerButton>
-          </BannerContent>
-        </MainBanner>
+        {/* 슬라이더 배너 */}
+        <BannerSliderContainer onWheel={handleWheel}>
+          <BannerSlider style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+            {bannerSlides.map((slide) => (
+              <BannerSlide key={slide.id} backgroundColor={slide.backgroundColor}>
+                <SlideContent>
+                  <SlideTitle>{slide.title}</SlideTitle>
+                  <SlideSubtitle>{slide.subtitle}</SlideSubtitle>
+                  <SlideButton to={slide.buttonLink}>{slide.buttonText}</SlideButton>
+                </SlideContent>
+              </BannerSlide>
+            ))}
+          </BannerSlider>
+          
+          {/* 좌하단 슬라이드 카운터 */}
+          <SliderNavigation>
+            <SlideCounter>
+              {currentSlide + 1} / {bannerSlides.length}
+            </SlideCounter>
+          </SliderNavigation>
+        </BannerSliderContainer>
 
-        {/* 검색 헤더 */}
         <SearchHeader>
-          <SearchInput 
-            type="text"
-            placeholder="브랜드, 모델명, 제품명 검색 (예: ThinkPad T480)"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <CategoryTabs>
+            {categories.map(category => (
+              <CategoryTab
+                key={category.id}
+                active={activeCategory === category.id}
+                onClick={() => setActiveCategory(category.id)}
+              >
+                {category.icon} {category.name}
+              </CategoryTab>
+            ))}
+          </CategoryTabs>
+
+          <SearchControls>
+            <SearchInput
+              type="text"
+              placeholder="상품명, 브랜드, 모델명으로 검색"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <SortSelect 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="latest">최신순</option>
+              <option value="price-low">낮은 가격순</option>
+              <option value="price-high">높은 가격순</option>
+              <option value="name">이름순</option>
+            </SortSelect>
+          </SearchControls>
         </SearchHeader>
 
-        {/* 카테고리 필터 */}
-        <FilterSection>
-          {categories.map((category) => (
-            <FilterChip
-              key={category.id}
-              active={activeCategory === category.id}
-              onClick={() => setActiveCategory(category.id)}
-            >
-              {category.name}
-            </FilterChip>
-          ))}
-        </FilterSection>
-
-        {/* 정렬 및 결과 수 */}
         <ControlBar>
-          <SortOptions>
-            {sortOptions.map((option) => (
-              <SortButton
-                key={option.id}
-                active={sortBy === option.id}
-                onClick={() => setSortBy(option.id)}
-              >
-                {option.name}
-              </SortButton>
-            ))}
-          </SortOptions>
           <ProductCount>
-            총 {filteredProducts.length}개 상품
+            총 {sortedProducts.length}개 상품
           </ProductCount>
         </ControlBar>
 
         {/* 상품 그리드 */}
-        {filteredProducts.length > 0 ? (
+        {sortedProducts.length > 0 ? (
           <ProductGrid>
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} to={`/products/${product.id}`}>
-                <ProductImageContainer>
-                  <ProductImage>{product.image}</ProductImage>
-                  <ProductBadge type={product.badge}>
-                    {product.badge}
-                  </ProductBadge>
-                </ProductImageContainer>
-                <ProductInfo>
-                  <ProductBrand>{product.brand}</ProductBrand>
-                  <ProductName>{product.name}</ProductName>
-                  <ProductSpecs>{product.specs}</ProductSpecs>
-                  <ProductPrices>
-                    <PriceRow>
-                      <PriceLabel>즉시 구매가</PriceLabel>
-                      <PriceValue type="buy">{formatPrice(product.instantBuy)}</PriceValue>
-                    </PriceRow>
-                    <PriceRow>
-                      <PriceLabel>즉시 판매가</PriceLabel>
-                      <PriceValue type="sell">{formatPrice(product.instantSell)}</PriceValue>
-                    </PriceRow>
-                  </ProductPrices>
-                  <ProductMeta>
-                    <MetaItem>
-                      <HeartIcon>♡</HeartIcon>
-                      <MetaText>{Math.floor(Math.random() * 500) + 50}</MetaText>
-                    </MetaItem>
-                    <MetaItem>
-                      <ReviewIcon>⭐</ReviewIcon>
-                      <MetaText>{Math.floor(Math.random() * 100) + 10}</MetaText>
-                    </MetaItem>
-                  </ProductMeta>
-                </ProductInfo>
-              </ProductCard>
+            {sortedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                showHeartIcon={true}
+                onHeartClick={handleHeartClick}
+              />
             ))}
           </ProductGrid>
         ) : (

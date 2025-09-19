@@ -689,14 +689,15 @@ const TabContent = styled.div`
 // 모바일 푸터 스타일
 const MobileFooter = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: 60px; /* 모바일 네비게이션 바로 위에 위치 */
   left: 0;
   right: 0;
   background: white;
   border-top: 1px solid #ebebeb;
   padding: 12px 16px;
   display: none;
-  z-index: 100;
+  z-index: 1001; /* 모바일 네비게이션보다 높게 설정 */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   
   @media (max-width: 768px) {
     display: block;
@@ -756,22 +757,6 @@ const ButtonPrice = styled.span`
   font-weight: 400;
   opacity: 0.9;
   margin-top: 1px;
-`;
-
-const FooterBidGroup = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const FooterBidButton = styled.button`
-  flex: 1;
-  height: 36px;
-  border: 1px solid #ebebeb;
-  background: white;
-  color: #666;
-  border-radius: 6px;
-  font-size: 13px;
-  cursor: pointer;
 `;
 
 const SpecsTable = styled.table`
@@ -1407,15 +1392,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = () => {
               </FooterButton>
             </FooterButtonGroup>
           </FooterActionGroup>
-          
-          <FooterBidGroup>
-            <FooterBidButton onClick={() => handleBuyClick('bid')}>
-              구매 입찰
-            </FooterBidButton>
-            <FooterBidButton onClick={() => handleSellClick('bid')}>
-              판매 입찰
-            </FooterBidButton>
-          </FooterBidGroup>
         </MobileFooter>
       </Container>
     </DetailContainer>
