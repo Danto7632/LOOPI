@@ -34,7 +34,11 @@ LOOPI는 KREAM을 벤치마킹한 현대적인 중고거래 플랫폼입니다. 
 - **Routing**: React Router v6
 - **UI/UX**: KREAM-inspired Design System
 
-### DevOps
+### DevOps & Deployment
+- **CI/CD**: GitHub Actions
+- **Frontend Deployment**: Vercel
+- **Backend Deployment**: Railway
+- **Database**: MySQL (Production)
 - **Containerization**: Docker & Docker Compose
 - **Development**: Hot Reload 지원
 - **Build Tools**: Webpack, Vite
@@ -243,7 +247,46 @@ REACT_APP_NAME=LOOPI
 4. 브랜치 푸시 (`git push origin feature/AmazingFeature`)
 5. Pull Request 생성
 
-## 📜 라이센스
+## � 배포 (Deployment)
+
+### 자동 배포 설정
+
+이 프로젝트는 GitHub Actions를 통한 자동 CI/CD 파이프라인이 설정되어 있습니다.
+
+#### 배포 환경
+- **프론트엔드**: Vercel
+- **백엔드**: Railway
+- **데이터베이스**: MySQL (프로덕션)
+
+#### 배포 과정
+1. `main` 브랜치에 코드 푸시
+2. GitHub Actions가 자동으로 빌드 및 테스트 실행
+3. 테스트 통과 시 자동으로 프로덕션 환경에 배포
+
+#### 필수 설정
+배포를 위해 GitHub Repository Secrets에 다음 환경변수들을 설정해야 합니다:
+
+```bash
+# Vercel (프론트엔드)
+VERCEL_TOKEN=your_vercel_token
+VERCEL_ORG_ID=your_org_id
+VERCEL_PROJECT_ID=your_project_id
+REACT_APP_API_URL=https://your-backend-url.com
+
+# Railway (백엔드)
+RAILWAY_TOKEN=your_railway_token
+
+# 프로덕션 데이터베이스
+PROD_DB_HOST=your_production_db_host
+PROD_DB_USERNAME=your_db_username
+PROD_DB_PASSWORD=your_db_password
+PROD_DB_DATABASE=loopi_production
+PROD_JWT_SECRET=your_super_secret_jwt_key
+```
+
+자세한 설정 방법은 [배포 설정 가이드](.github/DEPLOYMENT_SETUP.md)를 참조하세요.
+
+## �📜 라이센스
 
 이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
 

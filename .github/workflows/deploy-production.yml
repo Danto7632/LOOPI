@@ -1,0 +1,87 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend to Vercel
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Build project
+      run: |
+        cd frontend
+        npm run build
+      env:
+        REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+    # Vercel 배포 (Vercel CLI 사용)
+    - name: Deploy to Vercel
+      run: |
+        cd frontend
+        npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
+      env:
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+  deploy-backend:
+    name: Deploy Backend to Railway
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        npm ci
+
+    - name: Build project
+      run: |
+        cd backend
+        npm run build
+
+    # Railway 배포
+    - name: Deploy to Railway
+      run: |
+        npm install -g @railway/cli
+        cd backend
+        railway deploy --token ${{ secrets.RAILWAY_TOKEN }}
+
+  # 배포 완료 알림
+  notify-deployment:
+    name: Notify Deployment Success
+    needs: [deploy-frontend, deploy-backend]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deployment Success
+      run: |
+        echo "🎉 배포가 성공적으로 완료되었습니다!"
+        echo "프론트엔드: Vercel"
+        echo "백엔드: Railway"
