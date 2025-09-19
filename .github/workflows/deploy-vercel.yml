@@ -3,7 +3,15 @@ name: Deploy to Vercel
 on:
   push:
     branches: [ main ]
-    paths: [ 'frontend/**' ]  # 프론트엔드 변경시에만 실행
+    paths: 
+      - 'frontend/**'
+      - '.github/workflows/deploy-vercel.yml'  # 이 워크플로우 수정시에도 실행
+  pull_request:
+    branches: [ main ]
+    paths: 
+      - 'frontend/**'
+      - '.github/workflows/deploy-vercel.yml'
+  workflow_dispatch:  # 수동 실행 가능
 
 jobs:
   deploy-frontend:
