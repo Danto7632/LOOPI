@@ -10,7 +10,8 @@ deploy:
 
 build:
   builder: nixpacks
-  buildCommand: npm run build
+  buildCommand: npm ci && npm run build
+  watchPatterns: ["**"]
 
 variables:
   NODE_ENV: production
