@@ -1,12 +1,53 @@
-# GitHub Actions Secrets 설정 가이드
+# GitHub Actions 배포 설정 가이드
 
-이 프로젝트의 배포를 위해 GitHub Repository Secrets에 다음 환경변수들을 설정해야 합니다.
+## 🚨 현재 오류 해결 방법
 
-## 필수 설정 방법
-1. GitHub 리포지토리 페이지로 이동
-2. Settings > Secrets and variables > Actions 클릭
-3. "New repository secret" 버튼 클릭
-4. 아래 목록의 각 항목을 추가
+최근 배포에서 발생한 오류들:
+1. **Railway CLI**: `--token` 인수 문법 오류 → 수정됨
+2. **Vercel CLI**: 토큰이 설정되지 않음 → 조건부 실행으로 수정됨
+
+## 📋 배포 워크플로우 옵션
+
+### 1. 간단한 배포 (simple-deploy.yml) - 추천
+- ✅ 빌드만 수행하고 GitHub Pages에 프론트엔드 배포
+- ❌ 백엔드는 수동 배포 필요
+- 🔧 추가 설정 불필요
+
+### 2. 자동 배포 (deploy-production.yml)
+- ✅ Vercel + Railway 자동 배포
+- ❌ 토큰 설정 필수
+- 🔧 복잡한 설정 필요
+
+## 🛠️ 토큰 설정 방법 (자동 배포 사용시)
+
+### GitHub Repository Secrets 설정
+1. GitHub 리포지토리 → Settings → Secrets and variables → Actions
+2. "New repository secret" 클릭
+3. 아래 토큰들을 각각 추가
+
+### Vercel 토큰 획득
+```bash
+# 1. Vercel CLI 설치
+npm i -g vercel
+
+# 2. 로그인
+vercel login
+
+# 3. 토큰 생성
+vercel --token
+```
+
+### Railway 토큰 획득
+```bash
+# 1. Railway CLI 설치
+npm install -g @railway/cli
+
+# 2. 로그인
+railway login
+
+# 3. 토큰 확인 (대시보드에서)
+# https://railway.app/account/tokens
+```
 
 ## 백엔드 관련 Secrets
 

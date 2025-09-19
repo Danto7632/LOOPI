@@ -36,8 +36,14 @@ jobs:
     - name: Deploy to Vercel
       run: |
         cd frontend
-        npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
+        if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+          npx vercel --prod --confirm
+        else
+          echo "VERCEL_TOKEN not set. Skipping Vercel deployment."
+          echo "Please set VERCEL_TOKEN in GitHub repository secrets."
+        fi
       env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
@@ -71,7 +77,15 @@ jobs:
       run: |
         npm install -g @railway/cli
         cd backend
-        railway deploy --token ${{ secrets.RAILWAY_TOKEN }}
+        if [ -n "${{ secrets.RAILWAY_TOKEN }}" ]; then
+          railway login --token $RAILWAY_TOKEN
+          railway deploy
+        else
+          echo "RAILWAY_TOKEN not set. Skipping Railway deployment."
+          echo "Please set RAILWAY_TOKEN in GitHub repository secrets."
+        fi
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
   # 배포 완료 알림
   notify-deployment:

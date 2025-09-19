@@ -258,10 +258,30 @@ REACT_APP_NAME=LOOPI
 - **백엔드**: Railway
 - **데이터베이스**: MySQL (프로덕션)
 
-#### 배포 과정
-1. `main` 브랜치에 코드 푸시
-2. GitHub Actions가 자동으로 빌드 및 테스트 실행
-3. 테스트 통과 시 자동으로 프로덕션 환경에 배포
+### 📋 배포 워크플로우
+
+1. **CI/CD Pipeline** (`ci-cd.yml`)
+   - ✅ 코드 빌드 및 테스트
+   - ✅ 자동 실행 (모든 브랜치)
+
+2. **간단한 배포** (`simple-deploy.yml`) - **추천**
+   - ✅ GitHub Pages에 프론트엔드 자동 배포
+   - 🔧 추가 설정 불필요
+   - ⚡ 즉시 사용 가능
+
+3. **고급 배포** (`deploy-production.yml`)
+   - ✅ Vercel + Railway 자동 배포
+   - 🔧 토큰 설정 필요
+
+### 🔧 배포 문제해결
+
+**일반적인 오류:**
+- `option requires argument: --token` → GitHub Secrets에 토큰 미설정
+- `railway deploy --token` 오류 → Railway CLI 명령어 문법 변경됨 (수정됨)
+
+**해결방법:**
+1. 간단한 배포 사용 (GitHub Pages)
+2. 또는 [배포 설정 가이드](.github/DEPLOYMENT_SETUP.md)에 따라 토큰 설정
 
 #### 필수 설정
 배포를 위해 GitHub Repository Secrets에 다음 환경변수들을 설정해야 합니다:

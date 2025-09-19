@@ -1,0 +1,56 @@
+name: Simple Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    # 백엔드 빌드
+    - name: Build Backend
+      run: |
+        cd backend
+        npm ci
+        npm run build
+        echo "✅ Backend build completed"
+
+    # 프론트엔드 빌드
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm ci
+        npm run build
+        echo "✅ Frontend build completed"
+
+    # 간단한 배포 (선택적)
+    - name: Deploy to GitHub Pages (Frontend)
+      if: success()
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/build
+
+    # 배포 완료 알림
+    - name: Deployment Summary
+      run: |
+        echo "🎉 빌드가 성공적으로 완료되었습니다!"
+        echo ""
+        echo "📦 빌드된 항목:"
+        echo "  - 백엔드: backend/dist/"
+        echo "  - 프론트엔드: frontend/build/"
+        echo ""
+        echo "🚀 다음 단계:"
+        echo "  1. GitHub Pages에서 프론트엔드 확인"
+        echo "  2. 백엔드는 원하는 호스팅 서비스에 수동 배포"
+        echo "  3. 또는 Vercel/Railway 토큰 설정 후 자동 배포 활성화"
