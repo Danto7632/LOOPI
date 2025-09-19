@@ -3,14 +3,25 @@
 ## 🔧 해결된 오류들
 
 ### ✅ 1. Invalid workflow file 오류
-**문제**: `Unrecognized named-value: 'secrets'`
-**원인**: GitHub Actions 조건문에서 `secrets` 직접 사용
-**해결**: `${{ secrets.NAME }}` 형태로 수정
+**문제**: 
+- `Unrecognized named-value: 'secrets'`
+- `secrets.VERCEL_TOKEN && !secrets.RAILWAY_TOKEN` 문법 오류
 
-### ✅ 2. Vercel CLI --token 오류
+**원인**: GitHub Actions 조건문에서 secrets 사용 방법 잘못
+**해결**: `${{ secrets.NAME != '' }}` 형태로 수정
+
+### ✅ 2. 중복 환경변수 오류
+**문제**: 
+- `'VERCEL_ORG_ID' is already defined`
+- `'VERCEL_PROJECT_ID' is already defined`
+
+**원인**: env 섹션에서 같은 변수 중복 정의
+**해결**: 중복 제거 및 정리
+
+### ✅ 3. Vercel CLI --token 오류
 **문제**: `option requires argument: --token`
 **원인**: VERCEL_TOKEN이 빈 값으로 전달됨
-**해결**: 조건부 실행으로 토큰 없을 때 안전하게 처리
+**해결**: 토큰을 따옴표로 감싸고 조건부 실행 추가
 
 ## 🚀 현재 워크플로우 상태
 

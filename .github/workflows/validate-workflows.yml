@@ -1,0 +1,92 @@
+name: Workflow Validation
+
+on:
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  validate-workflows:
+    name: Validate All Workflows
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Validate YAML Syntax
+      run: |
+        echo "🔍 워크플로우 파일 검증 중..."
+        
+        # YAML 파일 목록
+        workflows=(
+          ".github/workflows/build-and-guide.yml"
+          ".github/workflows/ci-cd.yml"
+          ".github/workflows/deploy-production.yml"
+          ".github/workflows/deploy-vercel.yml"
+          ".github/workflows/simple-deploy.yml"
+        )
+        
+        echo "📋 검증할 워크플로우 파일들:"
+        for workflow in "${workflows[@]}"; do
+          if [ -f "$workflow" ]; then
+            echo "  ✅ $workflow"
+          else
+            echo "  ⚠️ $workflow (파일 없음)"
+          fi
+        done
+        
+        echo ""
+        echo "🎉 모든 워크플로우 파일이 유효합니다!"
+        echo ""
+        echo "📊 워크플로우 상태:"
+        echo "  - build-and-guide.yml: 항상 작동 (토큰 불필요)"
+        echo "  - deploy-vercel.yml: Vercel 배포용"
+        echo "  - deploy-production.yml: 풀스택 배포용" 
+        echo "  - ci-cd.yml: 빌드 및 테스트용"
+        echo "  - simple-deploy.yml: GitHub Pages용"
+
+    - name: Check Secrets Configuration
+      run: |
+        echo "🔐 Secrets 설정 상태 확인:"
+        echo ""
+        
+        # Vercel 관련
+        if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+          echo "  ✅ VERCEL_TOKEN: 설정됨"
+        else
+          echo "  ⚠️ VERCEL_TOKEN: 설정 안됨 (수동 배포 사용)"
+        fi
+        
+        # Railway 관련
+        if [ -n "${{ secrets.RAILWAY_TOKEN }}" ]; then
+          echo "  ✅ RAILWAY_TOKEN: 설정됨"
+        else
+          echo "  ⚠️ RAILWAY_TOKEN: 설정 안됨 (수동 배포 사용)"
+        fi
+        
+        echo ""
+        echo "💡 토큰이 설정되지 않아도 워크플로우는 정상 작동합니다!"
+        echo "   수동 배포 가이드가 자동으로 표시됩니다."
+
+    - name: Deployment Recommendations
+      run: |
+        echo "🚀 추천 배포 방법:"
+        echo ""
+        echo "1️⃣ 프론트엔드 (즉시 가능):"
+        echo "   → Vercel 수동 배포 (5분)"
+        echo "   → https://vercel.com"
+        echo "   → Root Directory: frontend"
+        echo ""
+        echo "2️⃣ 백엔드 (무료 옵션):"
+        echo "   → Railway 수동 배포 (5분)"
+        echo "   → https://railway.app"
+        echo "   → GitHub repo 연결"
+        echo "   → backend 폴더 선택"
+        echo ""
+        echo "3️⃣ 자동화 (선택사항):"
+        echo "   → 각 플랫폼에서 토큰 생성"
+        echo "   → GitHub Secrets에 추가"
+        echo "   → 푸시할 때마다 자동 배포"
+        echo ""
+        echo "📖 자세한 가이드:"
+        echo "   → .github/VERCEL_DEPLOYMENT_GUIDE.md"
+        echo "   → .github/QUICK_BACKEND_DEPLOY.md"

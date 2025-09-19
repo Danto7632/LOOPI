@@ -32,18 +32,25 @@ jobs:
       env:
         REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-    # Vercel 배포 (Vercel CLI 사용)
-    - name: Deploy to Vercel
+    # Vercel 프론트엔드 배포
+    - name: Deploy Frontend to Vercel
       run: |
         cd frontend
         if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
-          npx vercel --prod --confirm
+          npx vercel --prod --confirm --token "${{ secrets.VERCEL_TOKEN }}"
+          echo "✅ Vercel 프론트엔드 배포 완료!"
         else
-          echo "VERCEL_TOKEN not set. Skipping Vercel deployment."
-          echo "Please set VERCEL_TOKEN in GitHub repository secrets."
+          echo "⚠️ VERCEL_TOKEN not set."
+          echo "🔧 Vercel 수동 배포 가이드:"
+          echo "1. https://vercel.com 방문"
+          echo "2. GitHub 계정으로 로그인"
+          echo "3. 'Add New Project' 클릭"
+          echo "4. LOOPI 리포지토리 선택"
+          echo "5. Root Directory를 'frontend'로 설정"
+          echo "6. Deploy 클릭"
+          echo "📖 자세한 가이드: .github/VERCEL_DEPLOYMENT_GUIDE.md"
         fi
       env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
@@ -83,23 +90,27 @@ jobs:
           echo "✅ Railway 배포 완료!"
         else
           echo "⚠️ RAILWAY_TOKEN not set."
-          echo "Railway 수동 배포 가이드: https://railway.app"
+          echo "🔧 Railway 수동 배포 가이드:"
+          echo "1. https://railway.app 방문"
+          echo "2. GitHub 계정으로 로그인"
+          echo "3. 'New Project' 클릭"
+          echo "4. 'Deploy from GitHub repo' 선택"
+          echo "5. LOOPI 리포지토리의 backend 폴더 선택"
+          echo "6. MySQL 서비스 추가"
+          echo "📖 자세한 가이드: .github/QUICK_BACKEND_DEPLOY.md"
         fi
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
-    # 또는 Vercel 배포 (대안)
+    # Vercel 백엔드 배포 (대안)
     - name: Deploy Backend to Vercel (Alternative)
-      if: ${{ secrets.VERCEL_TOKEN && !secrets.RAILWAY_TOKEN }}
+      if: ${{ secrets.VERCEL_TOKEN != '' }}
       run: |
         cd backend
         npm run build
-        npx vercel --prod --confirm
-        echo "✅ Vercel 배포 완료!"
+        npx vercel --prod --confirm --token "${{ secrets.VERCEL_TOKEN }}"
+        echo "✅ Vercel 백엔드 배포 완료!"
       env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
