@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -207,7 +206,7 @@ const SectionSubtitle = styled.p`
 
 const FeatureGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-3xl);
   margin-bottom: var(--spacing-6xl);
 
@@ -452,119 +451,6 @@ const BigStatLabel = styled.div`
   }
 `;
 
-// CTA 섹션
-const CTASection = styled.section`
-  padding: var(--spacing-6xl) 0;
-  background: linear-gradient(135deg, var(--tech-green) 0%, var(--accent) 100%);
-  text-align: center;
-  color: var(--white);
-
-  @media (max-width: 768px) {
-    padding: var(--spacing-4xl) 0;
-  }
-
-  @media (max-width: 480px) {
-    padding: var(--spacing-3xl) 0;
-  }
-`;
-
-const CTAContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-
-  @media (max-width: 768px) {
-    padding: 0 var(--spacing-md);
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 var(--spacing-sm);
-  }
-`;
-
-const CTATitle = styled.h2`
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-bold);
-  margin-bottom: var(--spacing-lg);
-
-  @media (max-width: 768px) {
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--spacing-md);
-  }
-
-  @media (max-width: 480px) {
-    font-size: var(--font-size-xl);
-  }
-`;
-
-const CTADescription = styled.p`
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-3xl);
-  opacity: 0.9;
-
-  @media (max-width: 768px) {
-    font-size: var(--font-size-base);
-    margin-bottom: var(--spacing-2xl);
-  }
-
-  @media (max-width: 480px) {
-    font-size: var(--font-size-sm);
-    margin-bottom: var(--spacing-xl);
-    line-height: 1.5;
-  }
-`;
-
-const CTAButtons = styled.div`
-  display: flex;
-  gap: var(--spacing-lg);
-  justify-content: center;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-md);
-  }
-
-  @media (max-width: 480px) {
-    gap: var(--spacing-sm);
-  }
-`;
-
-const CTAButton = styled(Link)`
-  background: var(--white);
-  color: var(--business-primary);
-  border: none;
-  padding: var(--spacing-lg) var(--spacing-3xl);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-semibold);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-decoration: none;
-  display: inline-block;
-  min-height: 48px; /* 터치 친화적 높이 */
-  min-width: 120px;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    color: var(--business-primary);
-  }
-
-  @media (max-width: 768px) {
-    padding: var(--spacing-md) var(--spacing-2xl);
-    font-size: var(--font-size-base);
-  }
-
-  @media (max-width: 480px) {
-    padding: var(--spacing-sm) var(--spacing-xl);
-    font-size: var(--font-size-sm);
-    width: 100%;
-    max-width: 280px;
-    text-align: center;
-  }
-`;
-
 const HomePage: React.FC = () => {
   return (
     <HomeContainer>
@@ -679,20 +565,6 @@ const HomePage: React.FC = () => {
           </OpportunityStats>
         </OpportunityContent>
       </OpportunitySection>
-
-      {/* CTA Section */}
-      <CTASection>
-        <CTAContainer>
-          <CTATitle>지금 시작하세요</CTATitle>
-          <CTADescription>
-            안전하고 투명한 기업 IT자산 거래, LOOPI와 함께 새로운 기회를 만들어보세요.
-          </CTADescription>
-          <CTAButtons>
-            <CTAButton to="/trading">판매 시작하기</CTAButton>
-            <CTAButton to="/trading" className="secondary">구매 둘러보기</CTAButton>
-          </CTAButtons>
-        </CTAContainer>
-      </CTASection>
     </HomeContainer>
   );
 };

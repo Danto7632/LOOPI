@@ -154,7 +154,7 @@ const Header: React.FC = () => {
     <>
       <HeaderContainer>
         <HeaderContent>
-          <Logo>LOOPI</Logo>
+          <Logo>LOOPI <span style={{fontSize: '12px', color: '#666', fontWeight: 'normal'}}>Beta</span></Logo>
           
           <Nav>
             <NavLink href="/">HOME</NavLink>

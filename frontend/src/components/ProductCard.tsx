@@ -175,7 +175,7 @@ const HeartButton = styled.button<{ $isLiked: boolean }>`
 `;
 
 const ProductInfo = styled.div`
-  padding: 12px;
+  padding: 8px;
 `;
 
 const ProductBrand = styled.div`
@@ -188,7 +188,7 @@ const ProductBrand = styled.div`
 `;
 
 const ProductName = styled.div`
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #222;
   margin-bottom: 2px;
@@ -200,23 +200,23 @@ const ProductName = styled.div`
 `;
 
 const ProductCategory = styled.div`
-  font-size: 11px;
+  font-size: 10px;
   color: #8e8e93;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 `;
 
 const PriceSection = styled.div`
-  margin-top: 8px;
+  margin-top: 6px;
 `;
 
 const PriceLabel = styled.div`
-  font-size: 10px;
+  font-size: 9px;
   color: #8e8e93;
   margin-bottom: 2px;
 `;
 
 const PriceValue = styled.div`
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: #222;
 `;
