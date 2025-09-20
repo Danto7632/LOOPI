@@ -619,7 +619,7 @@ const Header: React.FC = () => {
       <HeaderContent>
         <Logo to="/">
           L<span className="highlight">OO</span>PI
-          <BusinessBadge>B2B</BusinessBadge>
+          <BusinessBadge>Beta</BusinessBadge>
         </Logo>
 
         <Navigation>

@@ -85,7 +85,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'laptop',
     modelYear: 2023,
     description: 'M2 Pro 칩이 탑재된 최신 MacBook Pro 16인치 모델',
-    baseImage: '/images/macbook-pro-16.jpg',
+    baseImage: '/macbook.png',
     variants: [
       {
         id: 'laptop-001-1',
@@ -103,7 +103,7 @@ export const MOCK_PRODUCTS: Product[] = [
         },
         condition: 'S',
         stock: 5,
-        images: ['/images/macbook-pro-16-space-gray.jpg']
+        images: ['/macbook.png']
       },
       {
         id: 'laptop-001-2',
@@ -121,7 +121,7 @@ export const MOCK_PRODUCTS: Product[] = [
         },
         condition: 'S',
         stock: 3,
-        images: ['/images/macbook-pro-16-silver.jpg']
+        images: ['/macbook.png']
       }
     ],
     tags: ['프리미엄', '디자인', '개발', '영상편집'],
@@ -140,7 +140,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'laptop',
     modelYear: 2023,
     description: '비즈니스 프리미엄 울트라북, 14인치 터치 디스플레이',
-    baseImage: '/images/thinkpad-x1-carbon.jpg',
+    baseImage: '/thinkpad.avif',
     variants: [
       {
         id: 'laptop-002-1',
@@ -158,7 +158,7 @@ export const MOCK_PRODUCTS: Product[] = [
         },
         condition: 'A',
         stock: 8,
-        images: ['/images/thinkpad-x1-carbon-black.jpg']
+        images: ['/thinkpad.avif']
       }
     ],
     tags: ['비즈니스', '가볍다', '터치', '키보드'],
@@ -177,7 +177,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'desktop',
     modelYear: 2023,
     description: 'M2 칩이 탑재된 올인원 데스크톱, 4.5K Retina 디스플레이',
-    baseImage: '/images/imac-24.jpg',
+    baseImage: '/imac.webp',
     variants: [
       {
         id: 'desktop-001-1',
@@ -195,7 +195,7 @@ export const MOCK_PRODUCTS: Product[] = [
         },
         condition: 'S',
         stock: 6,
-        images: ['/images/imac-24-blue.jpg']
+        images: ['/imac.webp']
       },
       {
         id: 'desktop-001-2',
@@ -213,7 +213,7 @@ export const MOCK_PRODUCTS: Product[] = [
         },
         condition: 'S',
         stock: 4,
-        images: ['/images/imac-24-silver.jpg']
+        images: ['/imac.webp']
       }
     ],
     tags: ['올인원', '디자인', '4K', '컴팩트'],
@@ -232,7 +232,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'monitor',
     modelYear: 2022,
     description: '27인치 5K Retina 디스플레이, Thunderbolt 연결',
-    baseImage: '/images/studio-display.jpg',
+    baseImage: '/studiodisplay.jpeg',
     variants: [
       {
         id: 'monitor-001-1',
