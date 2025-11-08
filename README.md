@@ -1,5 +1,11 @@
 # 🔄 LOOPI - KREAM 스타일 트레이딩 플랫폼
 
+> 🌐 **Production**: https://loopi-frontend.vercel.app/
+
+| 모바일 홈 화면 | 웹 홈 화면 |
+| --- | --- |
+| ![LOOPI 모바일 홈 화면](public/homepage_mobile.png) | ![LOOPI 웹 홈 화면](public/homepage.png) |
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
@@ -11,7 +17,7 @@ LOOPI는 KREAM을 벤치마킹한 현대적인 중고거래 플랫폼입니다. 
 
 ### ✨ 주요 특징
 
-- � **실시간 거래 시스템**: 즉시 구매/판매 가능
+- ⚙️ **실시간 거래 시스템**: 즉시 구매/판매 가능
 - 📊 **가격 차트 및 분석**: 시장 동향 시각화
 - 🔒 **안전거래 보장**: 에스크로 기반 결제 시스템
 - 📱 **모바일 최적화**: 반응형 웹 디자인
@@ -104,113 +110,6 @@ LOOPI/
 - **시장 동향**: 카테고리별 인기 상품
 - **가격 예측**: 머신러닝 기반 시세 예측
 
-## 🚀 빠른 시작
-
-### 필수 요구사항
-- Node.js 18.0+
-- MySQL 8.0+
-- Docker (선택사항)
-
-### 1️⃣ 저장소 클론
-```bash
-git clone https://github.com/Danto7632/LOOPI.git
-cd LOOPI
-```
-
-### 2️⃣ 백엔드 설정 및 실행
-```bash
-cd backend
-
-# 의존성 설치
-npm install
-
-# 환경 변수 설정
-cp .env.example .env
-# .env 파일 편집하여 데이터베이스 정보 입력
-
-# 개발 서버 실행
-npm run start:dev
-```
-
-### 3️⃣ 프론트엔드 설정 및 실행
-```bash
-cd frontend
-
-# 의존성 설치
-npm install
-
-# 개발 서버 실행
-npm start
-```
-
-### 4️⃣ Docker를 이용한 실행 (선택사항)
-```bash
-# 백엔드 디렉토리에서
-cd backend
-docker-compose up -d
-```
-
-## 🌐 서비스 접속
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:3001
-- **Database**: localhost:3306
-
-## � API 문서
-
-개발 서버 실행 후 다음 주소에서 API 문서를 확인할 수 있습니다:
-- **Swagger UI**: http://localhost:3001/api/docs
-
-## 🧪 테스트
-
-### 백엔드 테스트
-```bash
-cd backend
-npm run test
-npm run test:e2e
-```
-
-### 프론트엔드 테스트
-```bash
-cd frontend
-npm test
-```
-
-## 🔧 개발 환경 설정
-
-### 백엔드 환경 변수 (.env)
-```env
-# 데이터베이스
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-DB_DATABASE=loopi
-
-# JWT
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=7d
-
-# 서버
-PORT=3001
-```
-
-### 프론트엔드 환경 변수 (.env)
-```env
-REACT_APP_API_URL=http://localhost:3001
-REACT_APP_NAME=LOOPI
-```
-
-## 📊 데이터베이스 스키마
-
-주요 테이블 구조:
-- **users**: 사용자 정보 및 인증
-- **products**: 상품 정보 및 카테고리
-- **orders**: 주문 및 거래 내역
-- **payments**: 결제 정보 및 상태
-- **reservations**: 예약 매칭 시스템
-- **reviews**: 리뷰 및 평점 시스템
-
 ## 🎨 UI/UX 특징
 
 ### KREAM 스타일 디자인
@@ -239,86 +138,9 @@ REACT_APP_NAME=LOOPI
 - **캐싱 전략**: API 응답 캐싱 및 정적 자원 캐싱
 - **데이터베이스 최적화**: 인덱싱 및 쿼리 최적화
 
-## 🤝 기여하기
-
-1. 프로젝트 포크
-2. 기능 브랜치 생성 (`git checkout -b feature/AmazingFeature`)
-3. 변경사항 커밋 (`git commit -m 'Add some AmazingFeature'`)
-4. 브랜치 푸시 (`git push origin feature/AmazingFeature`)
-5. Pull Request 생성
-
-## � 배포 (Deployment)
-
-### 자동 배포 설정
-
-이 프로젝트는 GitHub Actions를 통한 자동 CI/CD 파이프라인이 설정되어 있습니다.
-
-#### 배포 환경
-- **프론트엔드**: Vercel
-- **백엔드**: Railway
-- **데이터베이스**: MySQL (프로덕션)
-
-### 📋 배포 워크플로우
-
-1. **CI/CD Pipeline** (`ci-cd.yml`)
-   - ✅ 코드 빌드 및 테스트
-   - ✅ 자동 실행 (모든 브랜치)
-
-2. **간단한 배포** (`simple-deploy.yml`) - **추천**
-   - ✅ GitHub Pages에 프론트엔드 자동 배포
-   - 🔧 추가 설정 불필요
-   - ⚡ 즉시 사용 가능
-
-3. **고급 배포** (`deploy-production.yml`)
-   - ✅ Vercel + Railway 자동 배포
-   - 🔧 토큰 설정 필요
-
-### 🔧 배포 문제해결
-
-**일반적인 오류:**
-- `option requires argument: --token` → GitHub Secrets에 토큰 미설정
-- `railway deploy --token` 오류 → Railway CLI 명령어 문법 변경됨 (수정됨)
-
-**해결방법:**
-1. 간단한 배포 사용 (GitHub Pages)
-2. 또는 [배포 설정 가이드](.github/DEPLOYMENT_SETUP.md)에 따라 토큰 설정
-
-#### 필수 설정
-배포를 위해 GitHub Repository Secrets에 다음 환경변수들을 설정해야 합니다:
-
-```bash
-# Vercel (프론트엔드)
-VERCEL_TOKEN=your_vercel_token
-VERCEL_ORG_ID=your_org_id
-VERCEL_PROJECT_ID=your_project_id
-REACT_APP_API_URL=https://your-backend-url.com
-
-# Railway (백엔드)
-RAILWAY_TOKEN=your_railway_token
-
-# 프로덕션 데이터베이스
-PROD_DB_HOST=your_production_db_host
-PROD_DB_USERNAME=your_db_username
-PROD_DB_PASSWORD=your_db_password
-PROD_DB_DATABASE=loopi_production
-PROD_JWT_SECRET=your_super_secret_jwt_key
-```
-
-자세한 설정 방법은 [배포 설정 가이드](.github/DEPLOYMENT_SETUP.md)를 참조하세요.
-
-## �📜 라이센스
-
-이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
-
-## 📞 문의
-
-- **개발자**: Danto7632
-- **GitHub**: [https://github.com/Danto7632](https://github.com/Danto7632)
-- **이슈 리포트**: [GitHub Issues](https://github.com/Danto7632/LOOPI/issues)
-
 ## 🙏 감사인사
 
-- [KREAM](https://kream.co.kr/) - 디자인 영감
+- [KREAM](https://kream.co.kr/) - 디자인
 - [NestJS](https://nestjs.com/) - 강력한 백엔드 프레임워크
 - [React](https://reactjs.org/) - 현대적인 프론트엔드 라이브러리
 
