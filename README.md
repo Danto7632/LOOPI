@@ -1,4 +1,4 @@
-# 🔄 LOOPI - KREAM 스타일 트레이딩 플랫폼
+# 🔄 LOOPI -  KREAM 스타일 IT자산 전문거래 플랫폼
 
 > 🌐 **Production**: https://loopi-frontend.vercel.app/
 
