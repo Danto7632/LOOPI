@@ -141,9 +141,5 @@ LOOPI/
 ## 🙏 감사인사
 
 - [KREAM](https://kream.co.kr/) - 디자인
-- [NestJS](https://nestjs.com/) - 강력한 백엔드 프레임워크
-- [React](https://reactjs.org/) - 현대적인 프론트엔드 라이브러리
 
 ---
-
-**⭐ 이 프로젝트가 도움이 되었다면 스타를 눌러주세요!**
